@@ -9,6 +9,7 @@ import com.github.dockerjava.api.command.*;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.command.ExecStartResultCallback;
+import org.apache.logging.log4j.message.ExitMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -93,17 +94,31 @@ public class DockerCodeSandbox implements CodeSandbox {
                     .withAttachStdout(true)
                     .exec();
             System.out.println("创建执行命令: " + execCreateCmdResponse);
+
             String execId = execCreateCmdResponse.getId();
 
             ExecStartResultCallback resultCallback = new ExecStartResultCallback() {
 
                 @Override
                 public void onNext(Frame frame) {
-                    // TODO: 2024/1/3 执行命令
+                    // 2024/1/3 执行命令
+                    StreamType streamType = StreamType.RAW;
+                    if (StreamType.STDERR.equals(streamType)) {
+                        System.out.println("输出错误结果: " + new String(frame.getPayload()));
+                    } else {
+                        System.out.println("输出结果: " + new String(frame.getPayload()));
+                    }
                     super.onNext(frame);
                 }
             };
-            dockerClient.execStartCmd(execId).exec(resultCallback);
+            try {
+                dockerClient.execStartCmd(execId)
+                        .exec(resultCallback)
+                        .awaitCompletion();
+            } catch (InterruptedException e) {
+                System.out.println("程序执行异常");
+                throw new RuntimeException(e);
+            }
         }
 
 
