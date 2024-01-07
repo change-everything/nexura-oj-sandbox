@@ -119,7 +119,8 @@ public abstract class JavaCodeSandboxTemplate implements CodeSandbox {
         ExecuteCodeResponse executeCodeResponse = new ExecuteCodeResponse();
         ArrayList<String> outputList = new ArrayList<>();
 
-        long maxTime = 0;
+        long maxTime = 0L;
+        long maxMemory = 0L;
         for (ExecuteMessage executeMessage : executeMessageList) {
             String errorMessage = executeMessage.getErrorMessage();
             if (StrUtil.isNotBlank(errorMessage)) {
@@ -133,14 +134,19 @@ public abstract class JavaCodeSandboxTemplate implements CodeSandbox {
             if (time != null) {
                 maxTime = Math.max(maxTime, time);
             }
+            Long memory = executeMessage.getMemory();
+            if (memory != null) {
+                maxMemory = Math.max(maxMemory, memory);
+            }
         }
         // 正常运行完成
         if (outputList.size() == executeMessageList.size()) {
-            executeCodeResponse.setStatus(1);
+            executeCodeResponse.setStatus(2);
         }
         executeCodeResponse.setOutput(outputList);
         JudgeInfo judgeInfo = new JudgeInfo();
         judgeInfo.setTime(maxTime);
+        judgeInfo.setMemory(maxMemory);
 
         executeCodeResponse.setJudgeInfo(judgeInfo);
         return executeCodeResponse;

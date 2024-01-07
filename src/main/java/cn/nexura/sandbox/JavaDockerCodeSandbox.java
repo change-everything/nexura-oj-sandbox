@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
 
-    public static boolean FIRST_INIT = true;
+    public static boolean FIRST_INIT = false;
 
     @Override
     protected List<ExecuteMessage> runFile(File userCodeFile, List<String> inputList) {
@@ -37,7 +37,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
         DockerClient dockerClient = DockerClientBuilder.getInstance().build();
 
         // 指定要拉取的镜像
-        String image = "openjdk:8-alpine";
+        String image = "xldevops/jdk17-alpine";
 
         // 判断是否已经初始化过
         if (FIRST_INIT) {
@@ -138,7 +138,7 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
             final long[] maxMemory = {0L};
             // 获取占用的内存
             StatsCmd statsCmd = dockerClient.statsCmd(containerId);
-            statsCmd.exec(new ResultCallback<Statistics>() {
+            ResultCallback<Statistics> statisticsResultCallback = statsCmd.exec(new ResultCallback<Statistics>() {
                 @Override
                 public void onStart(Closeable closeable) {
 
@@ -174,12 +174,15 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
                 stopWatch.stop();
                 time = stopWatch.getLastTaskTimeMillis();
                 statsCmd.close();
+                statisticsResultCallback.close();
             } catch (InterruptedException e) {
                 System.out.println("程序执行异常");
                 throw new RuntimeException(e);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
-            executeMessage.setMessage(message[0]);
+            executeMessage.setMessage(message[0].replaceAll("\n", ""));
             executeMessage.setErrorMessage(errorMessage[0]);
             executeMessage.setTime(time);
             executeMessage.setMemory(maxMemory[0]);
