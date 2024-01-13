@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2024年01月03日 16:50
  */
 @Component
-public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
+public class JavaDockerCodeSandbox extends CodeSandboxTemplate {
 
     public static boolean FIRST_INIT = false;
 
@@ -188,6 +188,12 @@ public class JavaDockerCodeSandbox extends JavaCodeSandboxTemplate {
             executeMessage.setMemory(maxMemory[0]);
             executeMessageList.add(executeMessage);
         }
+
+        StopContainerCmd stopContainerCmd = dockerClient.stopContainerCmd(containerId);
+        stopContainerCmd.exec();
+        RemoveContainerCmd removeContainerCmd = dockerClient.removeContainerCmd(containerId);
+        removeContainerCmd.exec();
+
         return executeMessageList;
     }
 }

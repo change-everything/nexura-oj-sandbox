@@ -1,25 +1,16 @@
 package cn.nexura.sandbox;
 
-import cn.nexura.sandbox.model.ExecuteCodeRequest;
 import cn.nexura.sandbox.model.ExecuteCodeResponse;
 import cn.nexura.sandbox.model.ExecuteMessage;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.List;
 
 /**
- * java原生实现
- * @author PeiYP
- * @since 2024年01月04日 12:23
- */
-@Component
-public class JavaNativeCodeSandbox extends CodeSandboxTemplate {
-
-    @Override
-    protected File saveCodeToFile(String code) {
-        return super.saveCodeToFile(code);
-    }
+ * @author peiYP
+ * @create 2024-01-13 21:48
+ **/
+public class CppDockerCodeSandbox extends CodeSandboxTemplate {
 
     @Override
     protected ExecuteMessage compileFile(File userCodeFile) {
@@ -39,10 +30,5 @@ public class JavaNativeCodeSandbox extends CodeSandboxTemplate {
     @Override
     protected boolean deleteFile(File userCodeFile) {
         return super.deleteFile(userCodeFile);
-    }
-
-    @Override
-    public ExecuteCodeResponse doExecute(ExecuteCodeRequest executeCodeRequest) {
-        return super.doExecute(executeCodeRequest);
     }
 }

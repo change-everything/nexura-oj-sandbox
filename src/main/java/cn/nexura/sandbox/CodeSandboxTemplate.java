@@ -18,7 +18,7 @@ import java.util.UUID;
  * @author PeiYP
  * @since 2024年01月04日 9:58
  */
-public abstract class JavaCodeSandboxTemplate implements CodeSandbox {
+public abstract class CodeSandboxTemplate implements CodeSandbox {
 
     private static final String GLOBAL_CODE_DIR_NAME = "tempCode";
 
