@@ -10,7 +10,7 @@
 |                                |                                                                 |
 |--------------------------------|-----------------------------------------------------------------|
 | nexura-oj-frontend(前端)         | https://github.com/change-everything/nexura-oj-frontend.git     |
-| nexura-oj-sandbox (后端单体版)      | https://github.com/change-everything/nexura-oj-backend.git      |
+| nexura-oj-backend (后端单体版)      | https://github.com/change-everything/nexura-oj-backend.git      |
 | nexura-oj-microservice(后端微服务版) | https://github.com/change-everything/nexura-oj-microservice.git |
 
 ## 后端技术选型
